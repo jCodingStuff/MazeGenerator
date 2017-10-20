@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class DrawingCanvas extends Canvas {
 
@@ -13,7 +14,7 @@ public class DrawingCanvas extends Canvas {
 	final int CELL_WIDTH = 40;
 	ArrayList<Cell> grid;
 	Cell current;
-	ArrayList<Cell> stack;
+	Stack<Cell> stack;
 
 	public DrawingCanvas(int width, int height) {
 		setSize(width, height);
@@ -28,7 +29,7 @@ public class DrawingCanvas extends Canvas {
 			}
 		}
 		current = grid.get(0);
-		stack = new ArrayList<Cell>();
+		stack = new Stack<Cell>();
 	}
 
 	public void draw() {
@@ -54,7 +55,7 @@ public class DrawingCanvas extends Canvas {
 			if (next != null) {
 				next.visited = true;
 				//STEP 2
-				stack.add(current);
+				stack.push(current);
 
 				//STEP 3
 				removeWalls(current, next);
@@ -63,9 +64,7 @@ public class DrawingCanvas extends Canvas {
 				current = next;
 			}
 			else if (stack.size() > 0) {
-				Cell back = stack.get(stack.size() - 1);
-				stack.remove(stack.size() - 1);
-				current = back;
+				current = stack.pop();
 			}
 
 		g.dispose();
